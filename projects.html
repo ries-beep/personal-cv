@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Repository </title>
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --nav-gray: #1a1a1a;
+            --cyber-red: #ff0000;
+            --cyber-gray: #333333;
+            --text-white: #ffffff;
+            --text-dim: #a0a0a0;
+            --panel-bg: rgba(20, 20, 20, 0.95);
+            --border-red: #4d0000;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 3px 100%;
+            color: var(--text-white);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .steam-nav {
+            background-color: var(--nav-gray);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--cyber-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .nav-content {
+            display: flex;
+            gap: 25px;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            color: var(--text-dim);
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--cyber-red);
+        }
+
+        .profile-container {
+            max-width: 940px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border: 1px solid var(--cyber-gray);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-red);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .panel-header {
+            font-size: 14px;
+            color: var(--cyber-red);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-red);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Project Cards */
+        .project-card {
+            border: 1px solid var(--cyber-gray);
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .project-card:hover {
+            border-color: var(--cyber-red);
+            background: rgba(255, 0, 0, 0.08);
+            transform: translateX(5px);
+        }
+
+        .project-img-thumb {
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--cyber-red);
+            object-fit: cover;
+        }
+
+        .tag {
+            font-size: 10px;
+            background: var(--border-red);
+            color: var(--cyber-red);
+            padding: 2px 6px;
+            margin-right: 5px;
+        }
+
+        /* Graph Styling */
+        .graph-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .graph-row {
+            width: 100%;
+        }
+
+        .graph-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 5px;
+            color: var(--text-dim);
+        }
+
+        .bar-track {
+            background: #1a1a1a;
+            height: 10px;
+            border: 1px solid var(--cyber-gray);
+            position: relative;
+        }
+
+        .bar-fill {
+            background: var(--cyber-red);
+            height: 100%;
+            width: 0%;
+            /* Animated via JS */
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+        }
+
+        /* Overlay Styling */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay-content {
+            background: var(--bg-black);
+            width: 80%;
+            max-width: 800px;
+            border: 2px solid var(--cyber-red);
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: var(--cyber-red);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .overlay-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .overlay-gallery img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border: 1px solid var(--cyber-gray);
+        }
+
+        #overlay-title {
+            color: var(--cyber-red);
+            font-size: 28px;
+            margin-top: 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-red);
+        }
+
+        #overlay-desc {
+            color: var(--text-white);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* Log Styling */
+        .log-line {
+            font-size: 11px;
+            color: #00ff00;
+            margin-bottom: 5px;
+        }
+
+        .log-timestamp {
+            color: var(--cyber-red);
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay" id="projectOverlay">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay()">[X]</span>
+            <div class="overlay-gallery" id="overlayGallery"></div>
+            <h2 id="overlay-title">Project Title</h2>
+            <p id="overlay-desc">Project Description goes here...</p>
+        </div>
+    </div>
+
+    <div class="steam-nav">
+        <div class="nav-content">
+            <span class="nav-item" style="color: var(--cyber-red);">[Projects]</span>
+            <span class="nav-item" onclick="window.location.href='network.html';">Network</span>
+            <span class="nav-item" onclick="window.location.href='index.html';">Profile</span>
+            <span class="nav-item" onclick="window.location.href='cv.html';">Cv</span>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <div class="main-layout">
+            <div class="left-col">
+                <div class="panel">
+                    <div class="panel-header">Directory: /root/projects</div>
+
+                    <div class="project-card" onclick="openProject('Nodays')">
+                        <img class="project-img-thumb" src="n1.png" alt="P1">
+                        <div>
+                            <h3 style="margin:0">NO-days</h3>
+                            <span class="tag">Python</span><span class="tag">Security</span>
+                            <p style="font-size:12px; color:var(--text-dim)">Finished</p>
+                        </div>
+                    </div>
+
+                    <div class="project-card" onclick="openProject('esp32')">
+                        <img class="project-img-thumb" src="e3.jpg" alt="P2">
+                        <div>
+                            <h3 style="margin:0">ESP32-wardos</h3>
+                            <span class="tag">C++/C</span><span class="tag">ESP32-DEV</span>
+                            <p style="font-size:12px; color:var(--text-dim)">Finished</p>
+                        </div>
+                    </div>
+
+                    <div class="project-card" onclick="openProject('Webzombie')">
+                        <img class="project-img-thumb" src="soon.jpg" alt="P2">
+                        <div>
+                            <h3 style="margin:0">Webzombie</h3>
+                            <span class="tag">C++/C</span><span class="tag">ESP32-DEV</span>
+                            <p style="font-size:12px; color:var(--text-dim)">Working on it</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="panel">
+                    <div class="panel-header">System_Status</div>
+                    <div class="log-line"><span class="log-timestamp">[Finished projects]</span>2</div>
+                    <div class="log-line"><span class="log-timestamp">[Pending projects]</span>3</div>
+                    <div class="log-line"><span class="log-timestamp">[Last update]</span>4/14/2026</div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">Project_Distribution</div>
+                    <div class="graph-container">
+
+                        <div class="graph-row">
+                            <div class="graph-label"><span>No-days</span><span>100%</span></div>
+                            <div class="bar-track">
+                                <div class="bar-fill" data-width="100%"></div>
+                            </div>
+                        </div>
+
+                        <div class="graph-row">
+                            <div class="graph-label"><span>Esp32-wardOs</span><span>80%</span></div>
+                            <div class="bar-track">
+                                <div class="bar-fill" data-width="60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="graph-row">
+                            <div class="graph-label"><span>PENDING</span><span>no project</span></div>
+                            <div class="bar-track">
+                                <div class="bar-fill" data-width="0%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const projects = {
+            Nodays: {
+                title: "No-days",
+                desc: "No days, inspired from zero-day events. A zero-day cyberattack exploits a previously unknown vulnerability in software or hardware before developers can create a patch. The no days is used to analyze vulnerability; this includes password checkers, port scanners, phishing, and bandits.",
+                images: [src = "n1.png", src = "n2.png", src = "n3.jpg"]
+            },
+            esp32: {
+                title: "Esp32-wardOs",
+                desc: "Ward OS acts like wards based on the games that used to be hidden and incoming, detecting threats. ",
+                images: [src = "esp32image.png", src = "e2.jpg", src = "e3.jpg"]
+            },
+            Webzombie: {
+                title: "Webzombie",
+                desc: "Website analyzer and pen. ",
+                images: ["https://via.placeholder.com/300x150/000/ff0000?text=Main_UI", "https://via.placeholder.com/300x150/000/ff0000?text=Scanner_Log", "https://via.placeholder.com/300x150/000/ff0000?text=Packet_Sniff"]
+            }
+        };
+
+        // Initialize Metrics Bars on Load
+        window.onload = () => {
+            const bars = document.querySelectorAll('.bar-fill');
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            }, 500);
+        };
+
+        function openProject(id) {
+            const data = projects[id];
+            const overlay = document.getElementById('projectOverlay');
+            const gallery = document.getElementById('overlayGallery');
+            document.getElementById('overlay-title').innerText = `> ${data.title}`;
+            document.getElementById('overlay-desc').innerText = data.desc;
+            gallery.innerHTML = '';
+            data.images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                gallery.appendChild(img);
+            });
+            overlay.style.display = 'flex';
+        }
+
+        function closeOverlay() {
+            document.getElementById('projectOverlay').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const overlay = document.getElementById('projectOverlay');
+            if (event.target == overlay) closeOverlay();
+        }
+    </script>
+</body>
+
+</html>

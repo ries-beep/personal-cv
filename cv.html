@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV_Viewer </title>
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --nav-gray: #1a1a1a;
+            --cyber-red: #ff0000;
+            --cyber-gray: #333333;
+            --text-white: #ffffff;
+            --panel-bg: rgba(20, 20, 20, 0.95);
+            --border-red: #4d0000;
+        }
+
+        body,
+        html {
+            background-color: var(--bg-black);
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 3px 100%;
+            color: var(--text-white);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            /* Prevents double scrollbars */
+        }
+
+        .steam-nav {
+            background-color: var(--nav-gray);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            border-bottom: 2px solid var(--cyber-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .nav-content {
+            display: flex;
+            gap: 25px;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            color: #a0a0a0;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--cyber-red);
+        }
+
+        .cv-viewer-container {
+            height: calc(100vh - 90px);
+            /* Subtracts nav height and margins */
+            max-width: 1000px;
+            margin: 15px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-red);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            font-size: 14px;
+            color: var(--cyber-red);
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* The actual PDF display area */
+        .pdf-frame {
+            flex-grow: 1;
+            width: 100%;
+            border: none;
+            /* Inverts colors if you want a dark-mode PDF look (optional) */
+            /* filter: invert(0.9) hue-rotate(180deg); */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="steam-nav">
+        <div class="nav-content">
+            <span class="nav-item" onclick="window.location.href='projects.html';">Projects</span>
+            <span class="nav-item" onclick="window.location.href='network.html';">Network</span>
+            <span class="nav-item" onclick="window.location.href='index.html';">Profile</span>
+            <span class="nav-item" style="color: var(--cyber-red);">[Cv]</span>
+        </div>
+    </div>
+
+    <div class="cv-viewer-container">
+        <div class="panel">
+            <div class="panel-header">> Accessing encrypted_file: CV.pdf</div>
+
+            <iframe src="Cv.pdf" class="pdf-frame" type="application/pdf">
+            </iframe>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

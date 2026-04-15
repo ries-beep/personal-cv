@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --nav-gray: #1a1a1a;
+            --cyber-red: #ff0000;
+            --cyber-gray: #333333;
+            --text-white: #ffffff;
+            --text-dim: #a0a0a0;
+            --panel-bg: rgba(15, 15, 15, 0.9);
+            --border-red: #4d0000;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Full Image Overlay Styling --- */
+        .modal-overlay {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid var(--cyber-red);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            object-fit: contain;
+        }
+
+        /* Top Menu Bar */
+        .steam-nav {
+            background-color: var(--nav-gray);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--cyber-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-content {
+            display: flex;
+            gap: 25px;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            color: var(--text-dim);
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--cyber-red);
+            text-shadow: 0 0 5px var(--cyber-red);
+        }
+
+        .profile-container {
+            max-width: 940px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px;
+            border: 1px solid var(--cyber-gray);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Header Section */
+        .profile-header {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 40px;
+            align-items: center;
+            border-left: 4px solid var(--cyber-red);
+            padding-left: 20px;
+        }
+
+        .avatar-container {
+            position: relative;
+            padding: 2px;
+            background: var(--cyber-red);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+            cursor: pointer;
+        }
+
+        .avatar-container img {
+            width: 164px;
+            height: 164px;
+            display: block;
+            filter: grayscale(100%) contrast(120%);
+        }
+
+        .user-info h1 {
+            font-size: 32px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .status {
+            color: var(--cyber-red);
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-red);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .panel-header {
+            font-size: 14px;
+            color: var(--cyber-red);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-red);
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 12px;
+            color: var(--text-white);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .achievement-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .achievement-icon {
+            width: 64px;
+            height: 64px;
+            background: #111;
+            border: 1px solid var(--cyber-gray);
+            cursor: pointer;
+            filter: grayscale(1);
+            transition: 0.3s;
+        }
+
+        .achievement-icon:hover {
+            filter: grayscale(0) sepia(100%) hue-rotate(-50deg) saturate(500%);
+            border-color: var(--cyber-red);
+            box-shadow: 0 0 10px var(--cyber-red);
+        }
+
+        .level-circle {
+            border: 2px solid var(--cyber-red);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        /* Red Background Lines */
+        .lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            margin: auto;
+            width: 90vw;
+            display: flex;
+            justify-content: space-between;
+            z-index: -1;
+        }
+
+        .line {
+            position: relative;
+            width: 1px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .line::after {
+            content: '';
+            display: block;
+            position: absolute;
+            height: 15vh;
+            width: 100%;
+            top: -50%;
+            left: 0;
+            background: linear-gradient(to bottom, rgba(220, 20, 60, 0) 0%, #DC143C 75%, #DC143C 100%);
+            animation: drop 7s infinite;
+        }
+
+        @keyframes drop {
+            0% {
+                top: -50%;
+            }
+
+            100% {
+                top: 110%;
+            }
+        }
+
+        /* Delays for the line animation */
+        .line:nth-child(1)::after {
+            animation-delay: 0.5s;
+        }
+
+        .line:nth-child(2)::after {
+            animation-delay: 1s;
+        }
+
+        .line:nth-child(3)::after {
+            animation-delay: 1.5s;
+        }
+
+        .line:nth-child(4)::after {
+            animation-delay: 2s;
+        }
+
+        .line:nth-child(5)::after {
+            animation-delay: 2.5s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeImage()">
+        <img class="modal-content" id="modalImg" src="" alt="Full View">
+    </div>
+
+    <div class="lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="steam-nav">
+        <div class="nav-content">
+            <span class="nav-item" onclick="window.location.href='projects.html';">Projects</span>
+            <span class="nav-item" onclick="window.location.href='network.html';">Network</span>
+            <span class="nav-item" style="color: var(--cyber-red);">[ Profile ]</span>
+            <span class="nav-item" onclick="window.location.href='cv.html';">Cv</span>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="avatar-container" onclick="openImage('cv_Profile.jpg')">
+                <img src="cv_Profile.jpg" alt="Avatar">
+            </div>
+            <div class="user-info">
+                <h1>John Rienan Sibayan</h1>
+                <p class="status">Online</p>
+                <p style="color: var(--text-dim); max-width: 400px;">
+                    Aspiring SOC Analyst | Back-End Web Developer | Pixel Artist
+                </p>
+            </div>
+            <div style="margin-left: auto; text-align: right;">
+                <div class="level-circle">21</div>
+                <p style="font-size: 11px; color: var(--cyber-red); margin-top: 5px; text-transform: uppercase;">Age</p>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <div class="left-col">
+                <div class="panel">
+                    <div class="panel-header">Note:</div>
+                    <p style="color: var(--text-dim); font-size: 13px; line-height: 1.6;">
+                        an enthusiastic learner, a passionate Security Operations Center (SOC) analyst, and a solid
+                        technical background in cybersecurity. As a programmer with expertise in Python scripting,
+                        vulnerabilities, and the lifetime of contemporary threats. committed and adaptable at work.
+                    </p>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <span>Certificates</span>
+                        <span style="color: var(--text-dim);">Total:3</span>
+                    </div>
+                    <div class="achievement-row">
+                        <img class="achievement-icon" src="cert1.png" onclick="openImage(this.src)" alt="Cert 1">
+                        <img class="achievement-icon" src="cert2.png" onclick="openImage(this.src)" alt="Cert 2">
+                        <img class="achievement-icon" src="cert3.png" onclick="openImage(this.src)" alt="Cert 3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="panel">
+                    <div class="panel-header">Badges</div>
+                    <div style="display: flex; gap: 8px;">
+                        <img src="badge1.png" class="achievement-icon" alt="B1" onclick="openImage(this.src)">
+                        <img src="badge2.png" class="achievement-icon" alt="B2" onclick="openImage(this.src)">
+                        <img src="bandge3.png" class="achievement-icon" alt="B3" onclick="openImage(this.src)">
+                    </div>
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">Data_Metric</div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Projects</span>
+
+                        <span class="stat-number">5</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Skills</span>
+
+                        <span class="stat-number">7</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Qualities</span>
+
+                        <span class="stat-number">5</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="panel">
+
+                    <div class="panel-header">knowledge</div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Python</span>
+
+                        <span class="stat-number">36%</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">kotlin</span>
+
+                        <span class="stat-number">50%</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">c/c++</span>
+
+                        <span class="stat-number">20%</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Cybersecurity</span>
+
+                        <span class="stat-number">45%</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">Web Development</span>
+
+                        <span class="stat-number">50%</span>
+
+                    </div>
+
+                    <div class="stat-row">
+
+                        <span class="stat-label">App Development</span>
+
+                        <span class="stat-number">50%</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const overlay = document.getElementById('modalOverlay');
+        const modalImg = document.getElementById('modalImg');
+
+        function openImage(src) {
+            modalImg.src = src;
+            overlay.style.display = 'flex';
+            // Disable scroll when image is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImage() {
+            overlay.style.display = 'none';
+            // Enable scroll when image is closed
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+</body>
+
+</html>
